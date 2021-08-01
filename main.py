@@ -2,19 +2,6 @@
 import pygame, sys, socket, server
 pygame.init()
 
-PORT = 1920
-ADDRESS = "localhost"
-WX = 1600
-WY = 900
-WINDOW = pygame.display.set_mode((WX, WY), 0, 32)
-pygame.display.set_caption("Speakeasy Tabletop")
-FONT = pygame.font.Font(None, 22)
-WHITE = (255,255,255)
-CHRONO = pygame.time.Clock()
-CARDBACK = pygame.image.load("Data\\CardsSmall\\Back.png").convert()
-CARDBACK.set_colorkey(CARDBACK.get_at((0,0)))
-PLAYERNAME = "Player"
-
 cardSize = (71, 96)
 gap = 4
 
@@ -399,6 +386,19 @@ TABLE.playGame()
 PLAYERNAME = input("Enter your name:  ")
 print("Choose an option:\n1) Host a game\n2) Connect to a game\nAnything else to exit")
 choice = input()
+
+PORT = 1920
+ADDRESS = "localhost"
+WX = 1600
+WY = 900
+WINDOW = pygame.display.set_mode((WX, WY), 0, 32)
+pygame.display.set_caption("Speakeasy Tabletop")
+FONT = pygame.font.Font(None, 22)
+WHITE = (255,255,255)
+CHRONO = pygame.time.Clock()
+CARDBACK = pygame.image.load("Data\\CardsSmall\\Back.png").convert()
+CARDBACK.set_colorkey(CARDBACK.get_at((0,0)))
+
 if choice == '1':
     TABLE = Table()
     TABLE.hosting = True
