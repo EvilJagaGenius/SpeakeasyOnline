@@ -71,7 +71,7 @@ class Server:
                         self.broadcast("startTurn:" + str(starter))
                 elif data.startswith("draw:"):
                     print(len(splitData))
-                    if len(splitData[1]) == 0:  # No card specified, pick a random card
+                    if len(splitData[1]) == 0 and len(self.deck) > 0:  # No card specified, pick a random card
                         card = self.deck.pop()
                         player.hand.append(card)
                         self.broadcast("draw:" + str(i) + ":" + card.name)

@@ -11,9 +11,56 @@ pygame.display.set_caption("Speakeasy Tabletop")
 FONT = pygame.font.Font(None, 22)
 WHITE = (255,255,255)
 CHRONO = pygame.time.Clock()
+CARDBACK = pygame.image.load("Data\\CardsSmall\\Back.png").convert()
+CARDBACK.set_colorkey(CARDBACK.get_at((0,0)))
+PLAYERNAME = "Player"
 
 cardSize = (71, 96)
 gap = 4
+
+def txtToSurface(startSurface, txt, font, color): # This function covers a pygame.Surface with text.
+    surface = startSurface.copy()
+    xLimit = surface.get_width()
+    yLimit = surface.get_height()
+    spaceLength = font.size(' ')[0]
+    x = spaceLength
+    y = 0
+    fontHeight = font.get_height()
+    
+    ignoreLine = False
+
+    txt = txt.split(' ') # txt is now a list.
+
+    # NTS, have newlines as their own word.
+    for word in txt:
+        if word == '\n': # If there's a newline char
+            if (y + fontHeight * 2 + 4) < yLimit: # Skip a line!
+                y += fontHeight + 2
+                x = spaceLength
+            else:
+                break
+        else: # For any other word
+            if x + font.size(word)[0] <= xLimit: # If the word fits on the surface
+                surface.blit(font.render(word, True, color), (x, y)) # Blit it on there
+                x += font.size(word)[0]
+                if word.endswith('.') or word.endswith('!') or word.endswith('?'): # If it ends with a period or similar thingus
+                    x += spaceLength * 2 # Add a double space
+                else: # Otherwise
+                    x += spaceLength # Add a single space
+            else: # BUT if it doesn't fit...
+                if (y + fontHeight * 2 + 4) < yLimit: # Skip a line!
+                    y += fontHeight + 2
+                    x = spaceLength
+                    surface.blit(font.render(word, True, color), (x, y)) # Blit it on there
+                    x += font.size(word)[0]
+                    if word.endswith('.') or word.endswith('!') or word.endswith('?'): # If it ends with a period
+                        x += spaceLength * 2 # Add a double space
+                    else: # Otherwise
+                        x += spaceLength # Add a single space
+                else:
+                    break
+
+    return surface # Et voila, a text-covered surface!
 
 class Player:
     def __init__(self):
@@ -39,10 +86,10 @@ class Card:
     def load(self):
         self.smallSprite = pygame.image.load("Data\\CardsSmall\\" + self.name + ".png").convert()
         self.smallSprite.set_colorkey(self.smallSprite.get_at((0,0)))
-        #file = open("Data\\CardText\\" + self.name + ".txt", 'r')
-        #for line in file:
-        #    self.text += line.strip()
-        #    self.text += '\n'
+        file = open("Data\\CardText\\" + self.name[0:-1] + ".txt", 'r')
+        for line in file:
+            self.text += line.strip()
+            self.text += ' \n '
         
 
 class Table:
@@ -79,6 +126,7 @@ class Table:
         textInputString = ""
         textInputType = None
         textInputPrompt = ""
+        cardTextSurface = pygame.Surface((400, 800))
         
 
         if self.hosting:
@@ -89,7 +137,8 @@ class Table:
         self.serverSocket.connect((ADDRESS, PORT))
         self.serverSocket.setblocking(False)
         # Need to send the server our name next (load this from a file)
-        self.serverSocket.sendall(b"name:Player")
+        self.localPlayer.name = PLAYERNAME
+        self.serverSocket.sendall(bytes("name:" + PLAYERNAME, "utf-8"))
         
         while True:
             #print("Table.playGame() loop")
@@ -112,12 +161,17 @@ class Table:
                     # Draw their cards in hand and on the field
                     for card in player.hand:
                         cardRect = pygame.Rect(x, y, cardSize[0], cardSize[1])
-                        sprite = card.smallSprite
-                        if clicked and cardRect.collidepoint(mousePos) and playerIndex == self.localPlayerIndex:
-                            selectedCard = card
+                        if cardRect.collidepoint(mousePos):
+                            if clicked and playerIndex == self.localPlayerIndex:
+                                selectedCard = card
+                            cardTextSurface.fill((0,0,0))
+                            WINDOW.blit(txtToSurface(cardTextSurface, card.text, FONT, WHITE), (WX//2, WY//2))
                         if dragging and selectedCard == card:
                             cardRect.center = mousePos
-                        WINDOW.blit(sprite, cardRect)
+                        if playerIndex == self.localPlayerIndex:
+                            WINDOW.blit(card.smallSprite, cardRect)
+                        else:
+                            WINDOW.blit(CARDBACK, cardRect)
                         x += cardRect.width + gap
                     x = 200
                     y = (playerIndex * 200) + 100
@@ -337,7 +391,7 @@ class Table:
                     player.hand.remove(card)
                     break
             self.cardsInDeck += 1
-
+"""
 TABLE = Table()
 TABLE.hosting = True
 TABLE.playGame()
@@ -355,4 +409,4 @@ elif choice == '2':
     TABLE.playGame()
 # Anything else jumps to here
 print("Exiting...")
-"""
+

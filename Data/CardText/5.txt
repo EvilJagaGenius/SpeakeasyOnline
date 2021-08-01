@@ -1,0 +1,6 @@
+5 - THE GUNMAN
+Like a Thug, but meaner, louder, and packing Chicago Typewriters.
+
+MASSACRE: Tap the Gunman and remove a card from the game.  You lose 1 Reputation, the target player gains 1 Info.
+ARMED ROBBERY: Tap a Gunman and any number of Thugs, gain $2 for every card tapped.
+ASSASSINATE: Tap a Burglar alongside the Gunman and spend 1 Info.  Remove a card from the game.

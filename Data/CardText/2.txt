@@ -1,0 +1,5 @@
+2 - THE NEWSBOY
+Hired for cents on the dollar to bellow headlines at the top of their lungs.  For a few extra cents they'll bellow whatever headlines you tell them to.
+
+EXTRA, EXTRA: Adjust a player's Reputation by 1.
+BAD PUBLICITY: Using the Thug against the Newsboy loses that player 1 Reputation, using the Gunman against the Newsboy loses that player 2 Reputation.

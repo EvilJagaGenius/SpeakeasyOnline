@@ -1,0 +1,13 @@
+K - THE KINGPIN
+The leader of this criminal organization, he moves cash wherever it needs to bring his plans to life.
+
+RECRUIT: Tap the Kingpin and spend $2.  Play a card from your hand onto the field.  Cards of the Kingpin's suit cost $1 less.
+INFAMY: If a Gunman Massacres or Assassinates the Kingpin, subtract your Reputation from that player's Reputation.
+MONEY MOVER: Tap the Kingpin and the...
+- Rat: Give another player $2, cancel that player's action.
+- Newsboy: Spend $2, "Extra, Extra" twice.
+- Urchin: Spend $X, gain X Reputation.
+- Barkeeper: Spend $X, Mix Drinks and put X additional cards in the Customer pile.
+- Burglar: Spend $X, gain X Info.
+- Politician: Spend $3, Lobby twice.
+- Cop: Spend $3 instead of 2 Info to Arrest a card.

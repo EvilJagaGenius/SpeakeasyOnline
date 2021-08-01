@@ -1,0 +1,5 @@
+8 - THE DOC
+When the gangsters shoot themselves to pieces, the Doc is there to stitch them back together, or gather evidence.
+
+DIAGNOSE: Your turn after a Gunman or Thug was used against you, tap the Doc.  Collect 1 Info for the Thug and 2 Info for the Gunman.
+SAVE: Tap the Doc in response to a Gunman's Massacre to cancel out that action.

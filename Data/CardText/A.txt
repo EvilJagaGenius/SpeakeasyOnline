@@ -1,0 +1,5 @@
+A - THE RAT
+The vilest, scummiest individual in the deck, the Rat is a double-agent who can sabotage other gangster's plans.  Useful... but never trusted.
+
+DOUBLE-CROSS: Tap the Rat and another card in response to another player using that card's action.  Cancel the other player's action, you may use that card's action if you wish.
+HAD IT COMING: Arresting the Rat costs 1 less Info.  Massacring the Rat costs 1 less Reputation.

@@ -1,0 +1,6 @@
+9 - THE BURGLAR
+Muscle and gunmen are well and good, but some jobs take a little more... finesse.
+
+ROB: Tap the Burglar and spend X Info.  Steal $X from another player.
+BOOZE HEIST: Tap the Smuggler alongside the Burglar and spend X Info.  Steal X Booze from another player.
+HIDE EVIDENCE: Tap the Burglar; adjust a player's Info by 1.

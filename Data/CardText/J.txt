@@ -1,0 +1,6 @@
+J - THE COP
+Third-most vile scum in the game.  A police officer willing to look the other way (or arrest rivals)... for a price.
+
+ARREST: Tap the Cop and spend 2 Info to remove a card from the game.
+BAIL: Tap either a Cop or Politician and pay $1 to cancel an Arrest.
+INVESTIGATE: Tap the Cop, gain 1 Info.

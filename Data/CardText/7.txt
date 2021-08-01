@@ -1,0 +1,6 @@
+7 - THE SMUGGLER
+You can't run a speakeasy without alcohol; the Smuggler can get it for you.
+
+GET THE GOODS: Tap the Smuggler, gain 1 Booze.
+BIG SHIPMENT: Tap the Thug alongside the Smuggler, gain 2 Booze.
+EXTRA STRENGTH: Tap the Smuggler and spend 1 Booze.  Untap a card.

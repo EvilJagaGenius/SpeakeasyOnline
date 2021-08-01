@@ -1,0 +1,5 @@
+4 - THE THUG
+Hired muscle, good for moving crates of booze around and "persuading" other gangsters.
+
+MUSCLE: Tap the Thug in response to another person's action.  Cancel that action.
+SMASH AND GRAB: Tap the Thug, gain $1.
