@@ -150,10 +150,11 @@ class Table:
                     for card in player.hand:
                         cardRect = pygame.Rect(x, y, cardSize[0], cardSize[1])
                         if cardRect.collidepoint(mousePos):
-                            if clicked and playerIndex == self.localPlayerIndex:
-                                selectedCard = card
-                            cardTextSurface.fill((0,0,0))
-                            WINDOW.blit(txtToSurface(cardTextSurface, card.text, FONT, WHITE), (WX//2, WY//2))
+                            if playerIndex == self.localPlayerIndex:
+                                cardTextSurface.fill((0,0,0))
+                                WINDOW.blit(txtToSurface(cardTextSurface, card.text, FONT, WHITE), (WX//2, WY//2))
+                                if clicked:
+                                    selectedCard = card
                         if dragging and selectedCard == card:
                             cardRect.center = mousePos
                         if playerIndex == self.localPlayerIndex:
@@ -260,8 +261,11 @@ class Table:
                             self.serverSocket.sendall(bytes("discard:" + selectedCard.name, "utf-8"))
                         elif drawButton.collidepoint(mousePos):
                             self.serverSocket.sendall(bytes("shuffleIn:" + selectedCard.name, "utf-8"))
-                        elif fieldRect.collidepoint(mousePos) and selectedCard in player.hand:
-                            self.serverSocket.sendall(bytes("play:" + selectedCard.name, "utf-8"))
+                        elif fieldRect.collidepoint(mousePos):
+                            print("Hit fieldRect")
+                            if selectedCard in self.localPlayer.hand:
+                                print("Card in hand")
+                                self.serverSocket.sendall(bytes("play:" + selectedCard.name, "utf-8"))
 
                     selectedCard = None
 
