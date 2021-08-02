@@ -94,6 +94,7 @@ class Table:
         self.cardsInDeck = 52
 
     def playGame(self):
+        global ADDRESS
         clicked = False
         dragging = False
         selectedCard = False
@@ -404,8 +405,8 @@ if choice == '1':
     TABLE.hosting = True
     TABLE.playGame()
 elif choice == '2':
-    TABLE = Table()
     ADDRESS = input("Enter the server's IP address:  ")
+    TABLE = Table()
     TABLE.playGame()
 # Anything else jumps to here
 print("Exiting...")
