@@ -50,7 +50,11 @@ class Server:
             newPlayer = Player()
             newPlayer.socket = conn
             self.players.append(newPlayer)
-            conn.sendall(bytes("playerIndex:" + str(len(self.players)-1), "utf-8"))
+            conn.sendall(bytes("playerIndex:" + str(len(self.players)-1) + "\n", "utf-8"))
+            # We need to get that player up to speed
+            for playerIndex in range(len(self.players)):
+                player = self.players[playerIndex]
+                conn.sendall(bytes("addPlayer:" + str(playerIndex) + ":" + player.name + "\n", "utf-8"))
         except BlockingIOError:
             pass
         # Get input from the players
