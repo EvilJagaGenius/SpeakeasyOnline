@@ -94,6 +94,13 @@ class Server:
                             player.hand.remove(card)
                             self.broadcast("play:" + str(i) + ":" + splitData[1])
                             break
+                elif data.startswith("return:"):
+                    for card in player.field:
+                        if card.name == splitData[1]:
+                            player.hand.append(card)
+                            player.field.remove(card)
+                            self.broadcast("return:" + str(i) + ":" + splitData[1])
+                            break
                 elif data.startswith("tap:"):
                     for card in player.field:
                         if card.name == splitData[1]:

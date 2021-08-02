@@ -1,4 +1,5 @@
-# Oooooh, what to do here... The goal is to make a Python/Pygame Speakeasy client.  We don't need much, just a deck of cards, a text display, and a tap/untap button.
+# Speakeasy online tabletop.
+
 import pygame, sys, socket, server
 pygame.init()
 
@@ -101,15 +102,16 @@ class Table:
         mousePos = (-1, -1)
         doubleClickTimer = 0
         
-        customersButton = pygame.Rect(0, 0, 100, 100)
+        readyButton = pygame.Rect(0, 0, 100, 100)
         discardButton = pygame.Rect(0, 100, 100, 100)
         drawButton = pygame.Rect(0, 200, 100, 100)
-        readyButton = pygame.Rect(0, 300, 100, 100)
+        customersButton = pygame.Rect(0, 300, 100, 100)
         cashButton = pygame.Rect(0, 400, 100, 50)
         boozeButton = pygame.Rect(0, 450, 100, 50)
         infoButton = pygame.Rect(0, 500, 100, 50)
         repButton = pygame.Rect(0, 550, 100, 50)
-        fieldRect = pygame.Rect(0,0,0,0)
+        fieldRect = pygame.Rect(100,0,WX-100,100)
+        handRect = pygame.Rect(100,0,WX-100,100)
         textInputBox = pygame.Rect(0, 0, 400, 100)
         textInputString = ""
         textInputType = None
@@ -140,12 +142,18 @@ class Table:
                 player = self.players[playerIndex]
                 if player != None:
                     if playerIndex == self.localPlayerIndex:
-                        fieldRect = pygame.Rect(100, (playerIndex*200)+100, WX-100, 200)
+                        handRect.top = playerIndex*200
+                        fieldRect.top = (playerIndex*200)+100
                     x = 200
                     y = playerIndex * 200
                     # Draw the player's rect and stats
                     pygame.draw.rect(WINDOW, WHITE, pygame.Rect(100, y, WX-100, 200), 1)
-                    WINDOW.blit(FONT.render(player.name, True, WHITE), (100, y))
+                    WINDOW.blit(FONT.render(player.name, True, WHITE), (105, y))
+                    WINDOW.blit(FONT.render("C:" + str(len(player.customers)), True, WHITE), (105, y+FONT_SIZE))
+                    WINDOW.blit(FONT.render("$" + str(player.cash), True, WHITE), (105, y+(FONT_SIZE*2)))
+                    WINDOW.blit(FONT.render("B:" + str(player.booze), True, WHITE), (105, y+(FONT_SIZE*3)))
+                    WINDOW.blit(FONT.render("I:" + str(player.info), True, WHITE), (105, y+(FONT_SIZE*4)))
+                    WINDOW.blit(FONT.render("R:" + str(player.reputation), True, WHITE), (105, y+(FONT_SIZE*5)))
                     # Draw their cards in hand and on the field
                     for card in player.hand:
                         cardRect = pygame.Rect(x, y, cardSize[0], cardSize[1])
@@ -170,12 +178,14 @@ class Table:
                         if card.tapped:
                             cardRect = pygame.Rect(x, y, cardSize[1], cardSize[0])
                             sprite = pygame.transform.rotate(card.smallSprite, 90)
-                        if clicked and cardRect.collidepoint(mousePos) and playerIndex == self.localPlayerIndex:
-                            selectedCard = card
-                            if doubleClickTimer > 0:
-                                print("Tapping", card.name)
-                                self.serverSocket.sendall(bytes("tap:" + card.name, "utf-8"))
-                            doubleClickTimer = 500
+                        if cardRect.collidepoint(mousePos):
+                            cardTextSurface.fill((0,0,0))
+                            WINDOW.blit(txtToSurface(cardTextSurface, card.text, FONT, WHITE), (WX//2, WY//2))
+                            if clicked and playerIndex == self.localPlayerIndex:
+                                selectedCard = card
+                                if doubleClickTimer > 0:
+                                    self.serverSocket.sendall(bytes("tap:" + card.name, "utf-8"))
+                                doubleClickTimer = 500
                         if dragging and selectedCard == card:
                             cardRect.center = mousePos
                         WINDOW.blit(sprite, cardRect)
@@ -262,11 +272,12 @@ class Table:
                         elif drawButton.collidepoint(mousePos):
                             self.serverSocket.sendall(bytes("shuffleIn:" + selectedCard.name, "utf-8"))
                         elif fieldRect.collidepoint(mousePos):
-                            print("Hit fieldRect")
                             if selectedCard in self.localPlayer.hand:
-                                print("Card in hand")
                                 self.serverSocket.sendall(bytes("play:" + selectedCard.name, "utf-8"))
-
+                        elif handRect.collidepoint(mousePos):
+                            if selectedCard in self.localPlayer.field:
+                                self.serverSocket.sendall(bytes("return:" + selectedCard.name, "utf-8"))
+                            
                     selectedCard = None
 
                 # Text box input
@@ -329,6 +340,12 @@ class Table:
                 if card.name == splitCommand[2]:
                     player.field.append(card)
                     player.hand.remove(card)
+        elif command.startswith("return:"):  # return:player:card
+            player = self.players[int(splitCommand[1])]
+            for card in player.field:
+                if card.name == splitCommand[2]:
+                    player.hand.append(card)
+                    player.field.remove(card)
         elif command.startswith("tap:"):  # tap:player:card
             player = self.players[int(splitCommand[1])]
             for card in player.field:
@@ -398,7 +415,8 @@ WX = 1600
 WY = 900
 WINDOW = pygame.display.set_mode((WX, WY), 0, 32)
 pygame.display.set_caption("Speakeasy Tabletop")
-FONT = pygame.font.Font(None, 22)
+FONT_SIZE = 18
+FONT = pygame.font.Font("Data\\Ubuntu-C.ttf", FONT_SIZE)
 WHITE = (255,255,255)
 CHRONO = pygame.time.Clock()
 CARDBACK = pygame.image.load("Data\\CardsSmall\\Back.png").convert()
