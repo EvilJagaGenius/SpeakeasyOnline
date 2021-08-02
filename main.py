@@ -97,7 +97,7 @@ class Table:
         global ADDRESS
         clicked = False
         dragging = False
-        selectedCard = False
+        selectedCard = None
         mousePos = (-1, -1)
         doubleClickTimer = 0
         
